@@ -1,5 +1,5 @@
 
-# Sprint 1 - Módulo de Pagos A
+# Sprint 2 - Módulo de Pagos A
 
 Este repositorio contiene el código del **backend** del módulo de pagos A, desarrollado con **Spring Boot** y **GraphQL**.
 
