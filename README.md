@@ -56,6 +56,7 @@ Puedes acceder al Playground de GraphQL en la siguiente URL: http://localhost:80
 - Configura las claves en las variables de entorno:
 
 export STRIPE_SECRET_KEY=tu_clave_secreta
+
 export STRIPE_WEBHOOK_SECRET=tu_clave_webhook
 
 - Instala el Stripe CLI siguiendo las instrucciones de la documentación de Stripe
