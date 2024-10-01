@@ -14,7 +14,7 @@ El proyecto tiene como objetivo manejar transacciones y pagos en un sistema de r
 - Consulta de detalles de pagos
 - Simulación de pagos y cargos adicionales
 
-Este backend se conecta con una base de datos **PostgreSQL** y está diseñado para ser consumido por un frontend React.
+Este backend se conecta con una base de datos **PostgreSQL** y está diseñado para ser consumido por un frontend React. Además, implementamos el uso del sandbox de Stripe y Mercado Pago para la simulación del pago de las reservas de la aerolinea. 
 
 ---
 
@@ -49,7 +49,23 @@ El backend estará corriendo en http://localhost:8080.
 
 Puedes acceder al Playground de GraphQL en la siguiente URL: http://localhost:8081/graphiql
 
-### 5. 📂 Estructura del Proyecto
+### 6. Configurar Stripe
+
+- Crea una cuenta en Stripe y obtén las claves secretas de la API.
+
+- Configura las claves en las variables de entorno:
+
+export STRIPE_SECRET_KEY=tu_clave_secreta
+export STRIPE_WEBHOOK_SECRET=tu_clave_webhook
+
+- Instala el Stripe CLI siguiendo las instrucciones de la documentación de Stripe
+
+- Usa el siguiente comando para escuchar el webhook de Stripe en el puerto 8081:
+
+  stripe listen --forward-to localhost:8081/stripe-webhook
+
+
+### 6. 📂 Estructura del Proyecto
 
 ```bash
 
