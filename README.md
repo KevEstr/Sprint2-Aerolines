@@ -61,8 +61,10 @@ Esto asegurará que se instalen las librerias y dependencias necesarias para cor
 Si la base de datos no se creó correctamente o los **seeders** no se aplicaron, ejecuta el siguiente comando para ejecutar los scripts de inicialización manualmente:
 
 ```bash
-docker-compose exec db psql -U postgres -d <nombre_database> -f /docker-entrypoint-initdb.d/data.sql
+docker-compose exec db psql -U postgres -d <juan_payment> -f /docker-entrypoint-initdb.d/data.sql
 ```
+
+Puedes cambiar `juan_payment` por el nombre de la database que hayas especificado en el archivo `docker-compose.yml`
 
 ### 4. Configurar Stripe
 
