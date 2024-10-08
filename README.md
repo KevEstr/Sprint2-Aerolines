@@ -40,7 +40,7 @@ git clone https://github.com/KevEstr/Sprint2-Aerolines
 
 ### 2. Configurar el Entorno
 
-Antes de correr el proyecto, asegúrate de configurar las variables de entorno necesarias:
+Antes de correr el proyecto, asegúrate de configurar las variables de entorno necesarias en el archivo application.properties en resources:
 
 ```bash
 export STRIPE_SECRET_KEY=tu_clave_secreta
@@ -84,6 +84,7 @@ docker-compose down
 
 ## 📂 Estructura del Proyecto
 
+```
 src/
 ├── main/
 │   ├── java/
@@ -101,12 +102,13 @@ src/
 │   │   └── application.properties  # Configuración de la base de datos
 ├── Dockerfile                      # Archivo Docker para contenerizar la app
 └── docker-compose.yml               # Configuración de Docker Compose
+```
 
 ---
 
 ## 📝 Notas Adicionales
 
-- **Playground de GraphQL**: Disponible en `http://localhost:8081/graphiql`.
+- **Playground de GraphQL**: Disponible en `http://localhost:8081/graphiql` haciendo uso de **Postman**
 - **Base de Datos**: La configuración de la base de datos **PostgreSQL** está en el archivo `docker-compose.yml`. Si deseas modificar credenciales o puertos, puedes ajustar estos valores ahí.
 - **Webhooks de Stripe**: Asegúrate de que las claves de Stripe estén configuradas correctamente en tus variables de entorno antes de ejecutar el contenedor.
 
