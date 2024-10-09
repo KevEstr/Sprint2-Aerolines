@@ -22,7 +22,7 @@ public class StripeWebhookController {
     @Autowired
     private IPaymentService paymentService;
 
-    private static final String endpointSecret = "whsec_b9c8b45f403fd69567d2553364f032accc5d81525c9887cbec6ed8d7d059a9ae";
+    private static final String endpointSecret = "whsec_59j59q6p2sjaUAKVRwI77xH8e5bn5VHm";
 
     @PostMapping("/stripe-webhook")
     public Map<String, String> handleStripeWebhook(
@@ -33,23 +33,29 @@ public class StripeWebhookController {
         try {
             Event event = Webhook.constructEvent(payload, sigHeader, endpointSecret);
 
-            if ("checkout.session.completed".equals(event.getType())) {
-                Session session = (Session) event.getData().getObject();
+            switch (event.getType()) {
+                case "checkout.session.completed":
+                    Session session = (Session) event.getData().getObject();
+                    Long transactionId = Long.parseLong(session.getMetadata().get("transactionId"));
 
-                Long transactionId = Long.parseLong(session.getMetadata().get("transactionId"));
+                    // Crear el pago en la base de datos
+                    InputPayment inputPayment = new InputPayment();
+                    inputPayment.setTransaction_id(transactionId);
+                    inputPayment.setGateway_payment_id(1L);  // ID de Stripe como gateway
+                    paymentService.createPayment(inputPayment);
 
-                // Crear el pago en la base de datos
-                InputPayment inputPayment = new InputPayment();
-                inputPayment.setTransaction_id(transactionId);
-                inputPayment.setGateway_payment_id(1L);  // ID de Stripe como gateway
+                    // Actualizar el estado de la transacción
+                    transactionService.updateTransactionStatus(transactionId, (byte) 1);
+                    responseMessage = "Pago completado y guardado exitosamente.";
+                    break;
 
+                case "checkout.session.failed":
+                    // Manejar eventos de intención de pago exitosa
+                    responseMessage = "Checkout Fallido.";
+                    break;
 
-                paymentService.createPayment(inputPayment);
-
-                // Actualizar el estado de la transacción
-                transactionService.updateTransactionStatus(transactionId, (byte) 1);
-
-                responseMessage = "Pago completado y guardado exitosamente.";
+                default:
+                    responseMessage = "Evento no manejado: " + event.getType();
             }
 
         } catch (Exception e) {
@@ -60,6 +66,7 @@ public class StripeWebhookController {
         response.put("message", responseMessage);
         return response;
     }
+
 
     @GetMapping("/success")
     public ResponseEntity<String> paymentSuccess() {

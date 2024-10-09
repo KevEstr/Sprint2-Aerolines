@@ -6,15 +6,15 @@ import com.mercadopago.client.preference.PreferenceRequest;
 import com.mercadopago.client.preference.PreferenceItemRequest;
 import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
 import com.mercadopago.exceptions.MPApiException;
-import com.mercadopago.net.MPResource;
-import com.mercadopago.resources.preference.Preference;
 import com.mercadopago.exceptions.MPException;
+import com.mercadopago.resources.preference.Preference;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class MercadoPagoService {
@@ -30,7 +30,7 @@ public class MercadoPagoService {
             // Crear un cliente de preferencias
             PreferenceClient client = new PreferenceClient();
 
-            // Crear el ítem de la preferencia (producto/servicio que se va a vender)
+            // Crear el ítem de la preferencia
             PreferenceItemRequest item = PreferenceItemRequest.builder()
                     .title("Transaction ID: " + transactionId)
                     .quantity(1)
@@ -44,10 +44,16 @@ public class MercadoPagoService {
                     .pending("http://localhost:8081/pending")
                     .build();
 
-            // Crear la solicitud de preferencia
+            // Agregar los metadatos (incluyendo el transactionId)
+            Map<String, Object> metadata = new HashMap<>();
+            metadata.put("transactionId", transactionId.toString());
+            System.out.println("Metadatos agregados a la preferencia: " + metadata);
+
+            // Crear la solicitud de preferencia con los metadatos
             PreferenceRequest preferenceRequest = PreferenceRequest.builder()
                     .items(List.of(item))
                     .backUrls(backUrls)
+                    .metadata(metadata)  // Incluye los metadatos aquí
                     .build();
 
             // Crear la preferencia usando el cliente
@@ -62,4 +68,5 @@ public class MercadoPagoService {
             throw new RuntimeException(e);
         }
     }
+
 }
